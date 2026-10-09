@@ -476,7 +476,7 @@ h2 {
 }
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
 }
 .service-card {
@@ -698,7 +698,7 @@ h2 {
 }
 .steps {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 35px;
   margin-top: 62px;
 }
@@ -2109,5 +2109,64 @@ footer {
   }
   .video-scroll-track .hero-visual {
     max-width: 270px;
+  }
+}
+
+/* Conteúdo editorial e formação: os mesmos tokens e grids da landing. */
+.about-heading {
+  align-self: start;
+}
+
+.about-copy > p:first-child {
+  margin-top: 0;
+}
+
+.credentials-note,
+.footer-details {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.credentials-note {
+  margin: 32px 0 0;
+}
+
+.credentials + .differences {
+  border-top: 1px solid var(--line);
+}
+
+.footer-details p {
+  margin: 0 0 8px;
+}
+
+.contact > p:not(.eyebrow) {
+  max-width: 650px;
+  margin-inline: auto;
+}
+
+@media (max-width: 800px) {
+  .about-heading {
+    margin-bottom: 24px;
+  }
+
+  .services-foot p {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .footer-details {
+    flex-basis: 100%;
+    font-size: 12px;
+  }
+
+  .credentials .differences-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .differences-grid {
+    grid-template-columns: 1fr;
   }
 }

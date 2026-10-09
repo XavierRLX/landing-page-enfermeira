@@ -49,3 +49,7 @@ A configuração final de domínio e DNS fica a cargo do provedor de hospedagem.
 ## Escopo clínico
 
 Os textos comerciais e serviços devem ser revisados pela profissional antes do lançamento. Confirmar habilitação, registro profissional, escopo dos procedimentos, região e canais de contato. Não usar depoimentos, títulos ou credenciais inventados.
+
+## Conteúdo editorial — 09/10/2026
+
+A página foi atualizada com o texto fornecido pelo responsável: atendimento no Rio de Janeiro — Capital; quatro serviços (medicamentos, curativos, pós-operatório e plantões); apresentação profissional; nova seção de formação e experiência; quatro diferenciais; três etapas de agendamento; contato e rodapé. As credenciais e a experiência são declarações fornecidas pelo usuário, sem verificação independente nesta alteração. A prévia mantém explicitamente a nota sobre instituições/titulação e `COREN-RJ [número a confirmar]`, conforme o texto recebido. A navegação inclui a seção de formação. Os quatro parágrafos da apresentação e a mensagem final dos serviços também aparecem no mobile.
