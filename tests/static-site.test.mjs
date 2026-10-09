@@ -26,6 +26,7 @@ test("a saída publica HTML, CSS, módulos e vídeos", async () => {
     "assets/enfermeira-scroll.mp4",
     "assets/enfermeira-mobile.mp4",
     "assets/enfermeira-poster.jpg",
+    "assets/enfermeira-final.webp",
   ];
   await Promise.all(required.map(async (file) => assert.ok(await exists(file), file)));
 });
@@ -38,6 +39,9 @@ test("a página carrega os módulos e o vídeo sem dependências externas", asyn
   assert.doesNotMatch(html, /video-scroll-track|video-caption|professional-card|care-ribbon/);
   assert.match(html, /enfermeira-scroll\.mp4/);
   assert.match(html, /enfermeira-mobile\.mp4/);
+  assert.match(html, /data-media-state="initial"/);
+  assert.match(html, /class="hero-still hero-still-initial"/);
+  assert.match(html, /class="hero-still hero-still-final"/);
   assert.match(html, /data-whatsapp/);
 });
 

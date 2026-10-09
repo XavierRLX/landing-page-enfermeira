@@ -16,7 +16,16 @@ function createEventTarget() {
   };
 }
 
-function createHarness({ reducedMotion = false } = {}) {
+function createHarness({
+  reducedMotion = false,
+  imageFails = false,
+  playFails = false,
+  deferPlaying = false,
+} = {}) {
+  const frame = { dataset: { mediaState: "initial" } };
+  const finalStill = {
+    decode: () => (imageFails ? Promise.reject(new Error("image")) : Promise.resolve()),
+  };
   const scroll = createEventTarget();
   const documentEvents = createEventTarget();
   const reduced = { ...createEventTarget(), matches: reducedMotion };
@@ -41,10 +50,12 @@ function createHarness({ reducedMotion = false } = {}) {
     playbackRate: 1,
     playCount: 0,
     play() {
+      if (playFails) return Promise.reject(new Error("autoplay"));
       this.paused = false;
       this.ended = false;
       this.playCount += 1;
       this.dispatch("play");
+      if (!deferPlaying) this.dispatch("playing");
       return Promise.resolve();
     },
     pause() {
@@ -66,6 +77,8 @@ function createHarness({ reducedMotion = false } = {}) {
     ...documentEvents,
     hidden: false,
     querySelector(selector) {
+      if (selector === ".video-frame") return frame;
+      if (selector === ".hero-still-final") return finalStill;
       if (selector === "#hero-video") return video;
       if (selector === ".motion-toggle") return button;
       return null;
@@ -76,6 +89,7 @@ function createHarness({ reducedMotion = false } = {}) {
 
   return {
     button,
+    frame,
     video,
     reduced,
     scroll() {
@@ -99,9 +113,11 @@ test("primeiro scroll dispara reprodução inteira sem controlar currentTime", a
   const ui = createHarness();
   try {
     assert.equal(ui.video.playCount, 0);
+    assert.equal(ui.frame.dataset.mediaState, "initial");
     ui.scroll();
     assert.equal(ui.video.playCount, 1);
     assert.equal(ui.video.playbackRate, 2);
+    assert.equal(ui.frame.dataset.mediaState, "video");
 
     ui.video.currentTime = 2.5;
     ui.scroll();
@@ -115,10 +131,12 @@ test("primeiro scroll dispara reprodução inteira sem controlar currentTime", a
     ui.video.paused = true;
     ui.video.dispatch("ended");
     assert.equal(ui.button.attributes["aria-label"], "Repetir vídeo");
+    assert.equal(ui.frame.dataset.mediaState, "final");
 
     ui.click();
     assert.equal(ui.video.currentTime, 0);
     assert.equal(ui.video.playCount, 2);
+    assert.equal(ui.frame.dataset.mediaState, "video");
   } finally {
     ui.cleanup();
   }
@@ -149,6 +167,91 @@ test("vídeo pausa em aba oculta e retoma ao voltar", async () => {
     assert.equal(ui.video.paused, true);
     ui.changeVisibility(false);
     assert.equal(ui.video.playCount, 2);
+  } finally {
+    ui.cleanup();
+  }
+});
+
+const settle = () => new Promise((resolve) => setImmediate(resolve));
+
+test("autoplay bloqueado preserva o still inicial e o controle manual", async () => {
+  const ui = createHarness({ playFails: true });
+  try {
+    ui.scroll();
+    await settle();
+    assert.equal(ui.frame.dataset.mediaState, "initial");
+    assert.equal(ui.button.attributes["aria-label"], "Reproduzir vídeo");
+    assert.equal(ui.video.paused, true);
+  } finally {
+    ui.cleanup();
+  }
+});
+
+test("still final indisponível e erro de vídeo preservam um retrato", async () => {
+  const ui = createHarness({ imageFails: true });
+  try {
+    ui.scroll();
+    await settle();
+    ui.video.ended = true;
+    ui.video.paused = true;
+    ui.video.dispatch("ended");
+    assert.equal(ui.frame.dataset.mediaState, "initial");
+    ui.video.dispatch("error");
+    assert.equal(ui.button.hidden, true);
+  } finally {
+    ui.cleanup();
+  }
+});
+
+test("ativar movimento reduzido em outra aba impede retomada automática", async () => {
+  const ui = createHarness();
+  try {
+    ui.scroll();
+    await settle();
+    ui.changeVisibility(true);
+    ui.reduced.matches = true;
+    ui.reduced.dispatch("change", { matches: true });
+    ui.changeVisibility(false);
+    assert.equal(ui.video.paused, true);
+    assert.equal(ui.video.playCount, 1);
+  } finally {
+    ui.cleanup();
+  }
+});
+
+test("pausa manual conserva o quadro intermediário e retoma sem reiniciar", async () => {
+  const ui = createHarness();
+  try {
+    ui.scroll();
+    await settle();
+    ui.video.currentTime = 2;
+    ui.click();
+    assert.equal(ui.video.paused, true);
+    assert.equal(ui.frame.dataset.mediaState, "video");
+    ui.click();
+    assert.equal(ui.video.currentTime, 2);
+    assert.equal(ui.video.playCount, 2);
+  } finally {
+    ui.cleanup();
+  }
+});
+
+test("imagem inicial só desaparece quando há reprodução, inclusive no replay", async () => {
+  const ui = createHarness({ deferPlaying: true });
+  try {
+    ui.scroll();
+    assert.equal(ui.frame.dataset.mediaState, "initial");
+    ui.video.dispatch("playing");
+    assert.equal(ui.frame.dataset.mediaState, "video");
+    await settle();
+    ui.video.ended = true;
+    ui.video.paused = true;
+    ui.video.dispatch("ended");
+    assert.equal(ui.frame.dataset.mediaState, "final");
+    ui.click();
+    assert.equal(ui.frame.dataset.mediaState, "initial");
+    ui.video.dispatch("playing");
+    assert.equal(ui.frame.dataset.mediaState, "video");
   } finally {
     ui.cleanup();
   }

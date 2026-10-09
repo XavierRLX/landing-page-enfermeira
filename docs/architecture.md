@@ -26,7 +26,17 @@ A Hero apresenta uma única mensagem principal, um CTA de WhatsApp e o vídeo em
 
 O primeiro evento de rolagem inicia a reprodução contínua do retrato (2×, como a experiência mobile aprovada). A posição da reprodução **não** está vinculada ao scroll: rolar de volta não reverte a animação e rolagens adicionais não a reiniciam. O botão permite pausar, retomar e repetir.
 
-O navegador seleciona um MP4 otimizado para mobile em telas de até 800px, e um vídeo de maior qualidade no desktop. A imagem `poster` aparece antes de carregar o vídeo.
+O navegador seleciona um MP4 otimizado para mobile em telas de até 800px, e um vídeo de maior qualidade no desktop. Duas imagens sobrepostas compartilham o enquadramento do vídeo e são controladas por `data-media-state`:
+
+- `initial`: `enfermeira-poster.jpg` (720 × 1280), já existente, visível mesmo depois de carregar metadados.
+- `video`: o evento `playing` revela o vídeo quando a reprodução começa de fato; o evento `play` sozinho não retira o retrato durante buffering.
+- `final`: o evento `ended` oculta o vídeo e mostra `enfermeira-final.webp` (640 × 1138). O replay volta ao início e aguarda `playing` para revelar o vídeo.
+
+A imagem final é decodificada antecipadamente. Se falhar ou ainda não estiver pronta, o retrato inicial permanece como fallback. Erro de mídia também restaura esse retrato e esconde o controle indisponível. Cada imagem tem descrição alternativa; apenas a camada visível fica disponível para leitores de tela. O vídeo e o controle mantêm suas descrições acessíveis.
+
+O still final foi extraído aos 5,95 s do MP4 desktop de 6 s, via decodificação do Chromium e Canvas em resolução nativa, e convertido para WebP **lossless**. Não houve geração por IA, alteração de rosto, sharpening ou ampliação artificial. A versão estática elimina recompressão adicional e usa a fonte desktop inclusive no mobile; não recupera detalhes inexistentes no vídeo original. Para maior definição em telas Retina, seria necessária uma foto original da pose final em resolução superior.
+
+A Hero usa duas colunas a partir de 641px e uma coluna abaixo disso. O desktop tem título de até 120px, retrato de até 620px, intervalo entre colunas de até 52px e fundo azul suave na metade direita. A altura acompanha o conteúdo, sem mínimo ligado à altura da janela. Em telas pequenas, o fundo permanece uniforme.
 
 Com `prefers-reduced-motion`, não há reprodução automática: a pessoa pode iniciar manualmente. A animação pausa se a aba perder visibilidade e retoma quando volta. A reprodução não envia ou armazena dados.
 

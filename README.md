@@ -9,7 +9,7 @@ O destaque é uma Hero minimalista com retrato em vídeo que inicia a reproduç�
 ## Destaques
 
 - Visual editorial com identidade em azul de enfermagem, responsivo e acessível.
-- Vídeo vertical acionado uma única vez no primeiro scroll, com reprodução contínua e controle de pausar/repetir.
+- Retratos estáticos antes e depois do vídeo, acionado uma única vez no primeiro scroll, com reprodução contínua e controle de pausar/repetir.
 - Hero com fotografia ampliada, mensagens objetivas e apenas um CTA principal.
 - Navegação mobile, cards de serviços e links para contato via WhatsApp.
 - Suporte à preferência do sistema por movimento reduzido.
@@ -28,7 +28,7 @@ Sem React, Next.js ou bundler: a solução estática atende aos requisitos com m
 .
 ├── .github/workflows/ci.yml
 ├── docs/architecture.md
-├── public/assets/            # Vídeo, imagem poster e fontes
+├── public/assets/            # Vídeos, stills e fontes
 ├── scripts/build.mjs         # Gera dist/
 ├── src/
 │   ├── fonts.css

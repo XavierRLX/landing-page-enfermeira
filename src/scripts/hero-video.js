@@ -9,7 +9,26 @@ export function initializeHeroVideo() {
   const video = document.querySelector("#hero-video");
   const control = document.querySelector(".motion-toggle");
 
-  if (!video || !control) return;
+  const frame = document.querySelector(".video-frame");
+  const finalStill = document.querySelector(".hero-still-final");
+
+  if (!video || !control || !frame || !finalStill) return;
+
+  let finalReady = false;
+  function showStill() {
+    frame.dataset.mediaState = video.ended && finalReady ? "final" : "initial";
+  }
+
+  // Decode eagerly; never expose the compressed ending while an image is loading.
+  finalStill
+    .decode()
+    .then(() => {
+      finalReady = true;
+      if (video.ended) showStill();
+    })
+    .catch(() => {
+      // The initial portrait remains a usable fallback if the final asset fails.
+    });
 
   const reducedMotion = window.matchMedia(REDUCED_MOTION_QUERY);
   let autoTriggered = false;
@@ -32,7 +51,10 @@ export function initializeHeroVideo() {
     if (document.hidden || playPending) return;
     if (!video.paused && !restart) return;
 
-    if (restart) video.currentTime = 0;
+    if (restart) {
+      frame.dataset.mediaState = "initial";
+      video.currentTime = 0;
+    }
 
     video.playbackRate = PLAYBACK_RATE;
     playPending = true;
@@ -76,21 +98,35 @@ export function initializeHeroVideo() {
     if (document.hidden) {
       resumeWhenVisible = !video.paused;
       video.pause();
-    } else if (resumeWhenVisible) {
+    } else if (resumeWhenVisible && !reducedMotion.matches) {
       resumeWhenVisible = false;
       play();
     }
   });
 
   reducedMotion.addEventListener("change", (event) => {
-    if (event.matches) video.pause();
+    if (event.matches) {
+      resumeWhenVisible = false;
+      video.pause();
+    }
   });
 
   ["play", "pause", "ended", "loadedmetadata"].forEach((eventName) => {
     video.addEventListener(eventName, updateControl);
   });
 
+  // "playing" waits for actual media, unlike "play", which can precede buffering.
+  video.addEventListener("playing", () => {
+    if (document.hidden) {
+      video.pause();
+      return;
+    }
+    frame.dataset.mediaState = "video";
+  });
+  video.addEventListener("ended", showStill);
+
   video.addEventListener("error", () => {
+    frame.dataset.mediaState = "initial";
     control.hidden = true;
   });
 
