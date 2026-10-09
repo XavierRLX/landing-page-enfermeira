@@ -63,15 +63,23 @@ npm run check
 
 Esse comando verifica formatação, gera a pasta `dist/` e executa testes automatizados.
 
-## Hospedagem gratuita: Cloudflare Pages
+## Hospedagem: Cloudflare Pages
 
-1. Conecte este repositório ao Cloudflare Pages.
-2. Escolha a branch `main`.
-3. **Build command:** `npm run build`.
-4. **Build output directory:** `dist`.
-5. Publique; em seguida, adicione um domínio personalizado na área de _Custom domains_.
+Site publicado: **https://maria-thereza-enfermagem.pages.dev/**.
 
-O conteúdo funciona em hospedagem estática e não usa variáveis de ambiente. Veja [a arquitetura](docs/architecture.md).
+O projeto Cloudflare Pages está conectado ao repositório `XavierRLX/landing-page-enfermeira`. A branch de produção é `main`, com deploy automático ativado: cada novo push nessa branch inicia um build e publica a versão resultante. O GitHub Actions continua responsável pelas verificações do repositório.
+
+Configuração do build no Cloudflare Pages:
+
+- **Framework preset:** None.
+- **Root directory:** raiz do repositório.
+- **Build command:** `npm run build`.
+- **Build output directory:** `dist`.
+- **Node.js:** 22 (`NODE_VERSION=22` no ambiente de build).
+
+O site é estático e não requer banco de dados, backend ou variáveis secretas. Veja [a arquitetura](docs/architecture.md).
+
+Para conectar futuramente um domínio `.com.br`, registre o domínio no Registro.br e adicione-o em **Cloudflare Pages → maria-thereza-enfermagem → Custom domains**. Siga as instruções de DNS apresentadas pelo Cloudflare para o domínio escolhido e aguarde a validação e emissão do certificado HTTPS. O domínio próprio ainda não está conectado.
 
 ## Conteúdo, imagem e atribuições
 
