@@ -2,14 +2,15 @@
 
 Landing page responsiva para divulgação de serviços de enfermagem domiciliar, criada com **HTML semântico, CSS moderno e JavaScript nativo**.
 
-O destaque é um retrato em vídeo cujo progresso acompanha a rolagem da página no desktop (_scroll scrubbing_), com experiência adaptada e mais leve para dispositivos móveis.
+O destaque é uma Hero minimalista com retrato em vídeo que inicia a reprodução completa na primeira rolagem — sem controlar os quadros pelo scroll — em desktop e mobile.
 
 > Projeto de apresentação profissional e engenharia de front-end. O conteúdo clínico e as informações comerciais devem ser validados pela profissional antes da divulgação definitiva.
 
 ## Destaques
 
 - Visual editorial com identidade em azul de enfermagem, responsivo e acessível.
-- Vídeo vertical com interação por scroll no desktop e versão otimizada no mobile.
+- Vídeo vertical acionado uma única vez no primeiro scroll, com reprodução contínua e controle de pausar/repetir.
+- Hero com fotografia ampliada, mensagens objetivas e apenas um CTA principal.
 - Navegação mobile, cards de serviços e links para contato via WhatsApp.
 - Suporte à preferência do sistema por movimento reduzido.
 - Sem backend, banco de dados, serviços pagos ou dependências de produção.
@@ -38,10 +39,12 @@ Sem React, Next.js ou bundler: a solução estática atende aos requisitos com m
 │   │   ├── main.js
 │   │   ├── navigation.js
 │   │   └── services.js
-│   └── styles/main.css
+│   └── styles/
+│       ├── hero.css         # Composição minimalista da Hero
+│       └── main.css
 ├── tests/static-site.test.mjs
 ├── package.json
-└── servir.py                 # Servidor local com suporte a HTTP Range
+└── servir.py                 # Servidor local de prévia estática
 ```
 
 ## Rodar localmente
@@ -53,7 +56,7 @@ npm ci
 npm run dev
 ```
 
-Abra **http://127.0.0.1:4173**. O servidor de desenvolvimento oferece suporte à requisição HTTP Range, importante para navegação pelos quadros do vídeo.
+Abra **http://127.0.0.1:4173**. O servidor de desenvolvimento oferece suporte a arquivos estáticos e vídeos.
 
 Para validar o projeto:
 

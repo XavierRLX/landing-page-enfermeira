@@ -16,6 +16,7 @@ test("a saída publica HTML, CSS, módulos e vídeos", async () => {
   const required = [
     "index.html",
     "style.css",
+    "hero.css",
     "fonts.css",
     "scripts/main.js",
     "scripts/contact.js",
@@ -33,6 +34,8 @@ test("a página carrega os módulos e o vídeo sem dependências externas", asyn
   const html = await readFile(path.join(output, "index.html"), "utf8");
   assert.match(html, /type="module"\s+src="scripts\/main\.js"/);
   assert.match(html, /id="hero-video"/);
+  assert.match(html, /href="hero\.css"/);
+  assert.doesNotMatch(html, /video-scroll-track|video-caption|professional-card|care-ribbon/);
   assert.match(html, /enfermeira-scroll\.mp4/);
   assert.match(html, /enfermeira-mobile\.mp4/);
   assert.match(html, /data-whatsapp/);

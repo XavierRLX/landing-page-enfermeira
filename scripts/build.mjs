@@ -14,6 +14,7 @@ await Promise.all([
   cp(path.join(source, "index.html"), path.join(output, "index.html")),
   cp(path.join(source, "fonts.css"), path.join(output, "fonts.css")),
   cp(path.join(source, "styles", "main.css"), path.join(output, "style.css")),
+  cp(path.join(source, "styles", "hero.css"), path.join(output, "hero.css")),
   cp(path.join(source, "scripts"), path.join(output, "scripts"), {
     recursive: true,
   }),

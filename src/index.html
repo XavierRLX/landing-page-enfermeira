@@ -16,6 +16,7 @@
     />
     <link rel="stylesheet" href="fonts.css" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="hero.css" />
     <script type="module" src="scripts/main.js"></script>
   </head>
   <body>
@@ -87,83 +88,47 @@
       <section class="hero" id="inicio">
         <div class="hero-inner wrap">
           <div class="hero-copy">
-            <p class="eyebrow"><span></span> PRESENÇA QUE ACOLHE. CUIDADO QUE PROTEGE.</p>
-            <h1>Cuidar de você.<br />Com técnica.<br />Com <em>humanidade.</em></h1>
+            <p class="eyebrow">ENFERMAGEM DOMICILIAR</p>
+            <h1>Cuidado que <em>acolhe.</em></h1>
             <p class="hero-description">
-              Cuidado de enfermagem no seu lar, com atenção a você e tranquilidade para sua família.
+              Assistência de enfermagem no conforto do seu lar, com atenção e respeito.
             </p>
             <div class="hero-actions">
-              <a class="button" data-whatsapp
-                ><svg class="icon"><use href="#i-message" /></svg>Agendar um atendimento</a
-              ><a class="text-link" href="#servicos">Conheça os serviços</a>
-            </div>
-            <div class="hero-assurance">
-              <svg class="icon"><use href="#i-shield" /></svg
-              ><span
-                >Uma profissional ao seu lado.<br /><strong
-                  >Mais tranquilidade para toda a família.</strong
-                ></span
-              >
+              <a class="button" data-whatsapp>
+                <svg class="icon"><use href="#i-message" /></svg>
+                Agendar atendimento
+              </a>
             </div>
           </div>
-          <div class="video-scroll-track">
-            <div class="hero-visual">
-              <span class="vertical-label">TÉCNICA, PRESENÇA E SENSIBILIDADE</span>
-              <div class="video-frame">
-                <video
-                  id="hero-video"
-                  muted
-                  playsinline
-                  preload="auto"
-                  poster="assets/enfermeira-poster.jpg"
-                  aria-label="Profissional de enfermagem em um corredor hospitalar"
-                >
-                  <source
-                    src="assets/enfermeira-mobile.mp4"
-                    media="(max-width: 800px)"
-                    type="video/mp4"
-                  />
-                  <source src="assets/enfermeira-scroll.mp4" type="video/mp4" />
-                </video>
-                <div class="video-shade"></div>
-                <div class="video-caption">
-                  <span>O CUIDADO COMEÇA NA PRESENÇA</span>
-                  <p>Você em boas mãos.</p>
-                </div>
-                <button
-                  class="motion-toggle"
-                  aria-label="Pausar animação ao rolar"
-                  aria-pressed="false"
-                >
-                  <span class="pause-symbol">Ⅱ</span>
-                </button>
-              </div>
-              <div class="professional-card">
-                <div class="care-seal">
-                  <svg class="icon"><use href="#i-heart" /></svg>
-                </div>
-                <div><strong>Maria Thereza</strong><span>Enfermeira · Home Care</span></div>
-                <svg class="icon card-check"><use href="#i-check" /></svg>
-              </div>
-              <div class="scroll-note">
-                <span class="scroll-line"></span>ROLE PARA CONHECER O CUIDADO
-              </div>
+          <div class="hero-visual">
+            <div class="video-frame">
+              <video
+                id="hero-video"
+                muted
+                playsinline
+                preload="metadata"
+                poster="assets/enfermeira-poster.jpg"
+                aria-label="Maria Thereza em uniforme de enfermagem"
+              >
+                <source
+                  src="assets/enfermeira-mobile.mp4"
+                  media="(max-width: 800px)"
+                  type="video/mp4"
+                />
+                <source src="assets/enfermeira-scroll.mp4" type="video/mp4" />
+              </video>
+              <button
+                class="motion-toggle"
+                type="button"
+                aria-label="Reproduzir vídeo"
+                aria-pressed="false"
+              >
+                <span aria-hidden="true">▷</span>
+              </button>
             </div>
           </div>
         </div>
       </section>
-      <div class="care-ribbon">
-        <div class="wrap ribbon-inner">
-          <span>Competência no cuidar.</span
-          ><span
-            ><svg class="icon"><use href="#i-home" /></svg>No conforto de casa</span
-          ><span
-            ><svg class="icon"><use href="#i-heart" /></svg>Olhar individualizado</span
-          ><span
-            ><svg class="icon"><use href="#i-shield" /></svg>Compromisso com você</span
-          >
-        </div>
-      </div>
       <section class="section services wrap" id="servicos">
         <div class="section-heading">
           <div>

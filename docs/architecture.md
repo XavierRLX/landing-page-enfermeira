@@ -7,7 +7,8 @@ O site é inteiramente estático: não há servidor de aplicação, banco de dad
 ## Estrutura
 
 - `src/index.html`: HTML semântico, SEO básico e conteúdo editorial.
-- `src/styles/main.css`: identidade visual e regras responsivas, sem framework CSS.
+- `src/styles/main.css`: identidade visual e regras responsivas existentes, sem framework CSS.
+- `src/styles/hero.css`: refinamento da primeira dobra, isolado das demais seções.
 - `src/fonts.css`: mapeamento das fontes locais.
 - `src/scripts/contact.js`: links de WhatsApp.
 - `src/scripts/navigation.js`: menu mobile e teclado.
@@ -19,13 +20,15 @@ O site é inteiramente estático: não há servidor de aplicação, banco de dad
 - `tests/`: testes de integridade do build.
 - `dist/`: saída gerada e ignorada pelo Git.
 
-## Vídeo e scroll
+## Vídeo e primeira rolagem
 
-No desktop, `currentTime` do vídeo é sincronizado ao progresso da rolagem. Os quadros independentes do MP4 de desktop ajudam a busca durante o scroll. O trecho da hero ganha altura adicional e seu conteúdo usa `position: sticky`.
+A Hero apresenta uma única mensagem principal, um CTA de WhatsApp e o vídeo em destaque, sem cartões e legendas sobre a imagem. Não há altura artificial ou seção fixada durante o scroll.
 
-No mobile, o vídeo menor começa quando o usuário rola e o elemento está visível; ele não usa scrubbing contínuo. Pausa quando sai da tela. Esta decisão evita buscar centenas de quadros durante interações de toque.
+O primeiro evento de rolagem inicia a reprodução contínua do retrato (2×, como a experiência mobile aprovada). A posição da reprodução **não** está vinculada ao scroll: rolar de volta não reverte a animação e rolagens adicionais não a reiniciam. O botão permite pausar, retomar e repetir.
 
-Respeitamos `prefers-reduced-motion`: a animação não inicia automaticamente se a preferência estiver ativa, e é possível controlar o movimento. A imagem `poster` aparece antes de o vídeo carregar.
+O navegador seleciona um MP4 otimizado para mobile em telas de até 800px, e um vídeo de maior qualidade no desktop. A imagem `poster` aparece antes de carregar o vídeo.
+
+Com `prefers-reduced-motion`, não há reprodução automática: a pessoa pode iniciar manualmente. A animação pausa se a aba perder visibilidade e retoma quando volta. A reprodução não envia ou armazena dados.
 
 ## Publicação
 
