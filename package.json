@@ -1,0 +1,21 @@
+{
+  "name": "landing-page-enfermeira",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page estática de serviços de enfermagem com vídeo controlado pelo scroll.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "npm run build && python3 servir.py",
+    "format": "prettier --write src scripts tests README.md docs .github package.json",
+    "format:check": "prettier --check src scripts tests README.md docs .github package.json",
+    "test": "node --test",
+    "check": "npm run format:check && npm run build && npm test"
+  },
+  "devDependencies": {
+    "prettier": "3.9.9"
+  }
+}

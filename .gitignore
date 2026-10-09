@@ -1,0 +1,19 @@
+# Dependencies and generated output
+node_modules/
+dist/
+coverage/
+*.log
+__pycache__/
+
+# Local/editor/platform state
+.DS_Store
+.openai/
+.vercel/
+.vercelignore
+vercel.json
+LEIA-ME.md
+
+# Local-only configuration (never commit secrets)
+.env
+.env.*
+!.env.example
