@@ -28,13 +28,13 @@ O primeiro evento de rolagem inicia a reprodução contínua do retrato (2×, co
 
 O navegador seleciona um MP4 otimizado para mobile em telas de até 800px, e um vídeo de maior qualidade no desktop. Duas imagens sobrepostas compartilham o enquadramento do vídeo e são controladas por `data-media-state`:
 
-- `initial`: `enfermeira-poster.jpg` (720 × 1280), já existente, visível mesmo depois de carregar metadados.
+- `initial`: `enfermeira-initial-restored.webp` (941 × 1672), restaurada por IA, visível mesmo depois de carregar metadados.
 - `video`: o evento `playing` revela o vídeo quando a reprodução começa de fato; o evento `play` sozinho não retira o retrato durante buffering.
-- `final`: o evento `ended` oculta o vídeo e mostra `enfermeira-final.webp` (640 × 1138). O replay volta ao início e aguarda `playing` para revelar o vídeo.
+- `final`: o evento `ended` oculta o vídeo e mostra `enfermeira-final-restored.webp` (941 × 1672). O replay volta ao início e aguarda `playing` para revelar o vídeo.
 
 A imagem final é decodificada antecipadamente. Se falhar ou ainda não estiver pronta, o retrato inicial permanece como fallback. Erro de mídia também restaura esse retrato e esconde o controle indisponível. Cada imagem tem descrição alternativa; apenas a camada visível fica disponível para leitores de tela. O vídeo e o controle mantêm suas descrições acessíveis.
 
-O still final foi extraído aos 5,95 s do MP4 desktop de 6 s, via decodificação do Chromium e Canvas em resolução nativa, e convertido para WebP **lossless**. Não houve geração por IA, alteração de rosto, sharpening ou ampliação artificial. A versão estática elimina recompressão adicional e usa a fonte desktop inclusive no mobile; não recupera detalhes inexistentes no vídeo original. Para maior definição em telas Retina, seria necessária uma foto original da pose final em resolução superior.
+A primeira extração sem perdas não resolveu a nitidez percebida. Após esse feedback e a confirmação de que não havia originais externos, foram recuperados os quadros inicial e final do vídeo de 720 × 1280 px do commit `e2e9358`. Ambos passaram por restauração generativa com a ferramenta integrada `image_gen`, orientada a preservar identidade, pose e composição. Os resultados têm resolução real de 941 × 1672 px; não são fotografias originais de alta resolução, e os detalhes reconstruídos podem diferir da fonte. Os WebP de qualidade 94 têm aproximadamente 203 KiB e 222 KiB. Fontes anteriores permanecem preservadas. Origem, prompts e limites estão em [Restauração dos retratos](hero-image-restoration.md).
 
 A Hero usa duas colunas a partir de 641px e uma coluna abaixo disso. O desktop tem título de até 120px, retrato de até 620px, intervalo entre colunas de até 52px e fundo azul suave na metade direita. A altura acompanha o conteúdo, sem mínimo ligado à altura da janela. Em telas pequenas, o fundo permanece uniforme.
 

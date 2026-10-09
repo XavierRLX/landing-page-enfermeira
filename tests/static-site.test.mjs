@@ -27,6 +27,8 @@ test("a saída publica HTML, CSS, módulos e vídeos", async () => {
     "assets/enfermeira-mobile.mp4",
     "assets/enfermeira-poster.jpg",
     "assets/enfermeira-final.webp",
+    "assets/enfermeira-initial-restored.webp",
+    "assets/enfermeira-final-restored.webp",
   ];
   await Promise.all(required.map(async (file) => assert.ok(await exists(file), file)));
 });
