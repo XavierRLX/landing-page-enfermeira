@@ -67,7 +67,7 @@ Produção existente: **https://maria-thereza-enfermagem.pages.dev/**.
 
 O Cloudflare Pages está conectado a `XavierRLX/landing-page-enfermeira`. A branch `main` tem deploy automático. Build: `npm run build`; diretório: `dist`; Node.js: 22. Nenhum segredo é necessário.
 
-**O redesign está em `codex/redesign-mtp-premium`, para revisão local. Não foi feito merge, push ou deploy nesta entrega.** Consulte [status](docs/STATUS.md) e [relatório do redesign](docs/redesign-premium.md). Não confundir a prévia com a versão publicada.
+**Redesign aprovado e publicado em 04/11/2026.** O código foi integrado por fast-forward à `main` (commit `d7fb4ae`), enviado ao GitHub e confirmado no site público da Cloudflare Pages. A branch `codex/redesign-mtp-premium` foi preservada; consulte [status](docs/STATUS.md) e [relatório do redesign](docs/redesign-premium.md).
 
 ## Conteúdo e origem dos assets
 

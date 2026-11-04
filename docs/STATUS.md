@@ -2,7 +2,7 @@
 
 ## Redesign premium MTP
 
-Implementado na branch local `codex/redesign-mtp-premium`, a partir de `0d5d67f`. Prévia para revisão visual; **sem push, merge ou deploy em produção**.
+Implementado na branch `codex/redesign-mtp-premium`, a partir de `0d5d67f`. **Aprovado e publicado em 04/11/2026** via fast-forward na `main` (commit `d7fb4ae`), com push normal para o GitHub e conteúdo público conferido na Cloudflare Pages.
 
 - Identidade mel/lilás/ameixa/marfim, monograma fornecido e variantes raster.
 - Fotografia estática anterior à restauração generativa; vídeo secundário iniciado por clique.
