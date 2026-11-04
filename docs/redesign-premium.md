@@ -30,7 +30,7 @@ A preparação técnica removeu somente margens transparentes (área útil: x=42
 
 - `mtp-plum.png`, `mtp-ivory.png`, `mtp-honey.png`: aplicação principal sobre fundos adequados.
 - `mtp-*-compact.png`: versões de 210px para header, assinatura e rodapé.
-- `favicon.png`: 64 × 64.
+- `favicon.png`, `favicon-32.png`, `favicon-16.png`: 64, 32 e 16px, com fundo mel totalmente opaco. Corrigido após revisão na aba escura: a versão inicial tinha transparência no centro e amarelo apenas nas margens. Cada tamanho é derivado diretamente da marca, sem alterar suas proporções; URLs atualizadas evitam reutilização da versão em cache.
 - `social.png`: 1200 × 630, monograma ameixa sobre mel.
 
 A hero usa `enfermeira-portrait.webp`, conversão WebP de qualidade 88, sem redimensionamento, retoque ou modificação facial, de `enfermeira-poster.jpg` (720 × 1280). É o poster do projeto anterior à restauração generativa documentada, não um novo original de câmera verificado. SHA-256 do poster: `742ff73b18c422383e781e37ff20a182baf2f76e7102a5b38f618351b8ea5ac5`. A conversão reduz aproximadamente 176 KiB para 62 KiB.
