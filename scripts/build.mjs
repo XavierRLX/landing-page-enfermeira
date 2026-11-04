@@ -8,13 +8,22 @@ const output = path.join(root, "dist");
 
 // Output is disposable. Source and public assets remain the single source of truth.
 await rm(output, { recursive: true, force: true });
-await mkdir(output, { recursive: true });
+await mkdir(path.join(output, "vendor"), { recursive: true });
 
 await Promise.all([
   cp(path.join(source, "index.html"), path.join(output, "index.html")),
   cp(path.join(source, "fonts.css"), path.join(output, "fonts.css")),
   cp(path.join(source, "styles", "main.css"), path.join(output, "style.css")),
   cp(path.join(source, "styles", "hero.css"), path.join(output, "hero.css")),
+  cp(path.join(source, "styles", "tokens.css"), path.join(output, "tokens.css")),
+  cp(
+    path.join(root, "node_modules/gsap/dist/gsap.min.js"),
+    path.join(output, "vendor/gsap.min.js"),
+  ),
+  cp(
+    path.join(root, "node_modules/gsap/dist/ScrollTrigger.min.js"),
+    path.join(output, "vendor/ScrollTrigger.min.js"),
+  ),
   cp(path.join(source, "scripts"), path.join(output, "scripts"), {
     recursive: true,
   }),

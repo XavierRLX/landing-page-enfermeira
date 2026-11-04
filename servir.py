@@ -6,7 +6,7 @@ import os
 import re
 
 SITE_DIRECTORY = Path(__file__).resolve().parent / "dist"
-HOST = "127.0.0.1"
+HOST = os.environ.get("HOST", "127.0.0.1")
 PORT = int(os.environ.get("PORT", "4173"))
 
 

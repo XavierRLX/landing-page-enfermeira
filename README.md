@@ -1,93 +1,78 @@
-# Maria Thereza — Enfermagem & Home Care
+# Maria Thereza Pugliese · Enfermagem domiciliar
 
-Landing page responsiva para divulgação de serviços de enfermagem domiciliar, criada com **HTML semântico, CSS moderno e JavaScript nativo**.
+Landing editorial estática em **HTML semântico, CSS e JavaScript ES Modules**, com fontes e assets locais. Identidade em amarelo mel, lilás, ameixa e marfim; logotipo MTP fornecido pelo responsável; retrato estático e contato direto pelo WhatsApp.
 
-O destaque é uma Hero minimalista com retrato em vídeo que inicia a reprodução completa na primeira rolagem — sem controlar os quadros pelo scroll — em desktop e mobile.
+## Prévia local
 
-> Projeto de apresentação profissional e engenharia de front-end. O conteúdo clínico e as informações comerciais devem ser validados pela profissional antes da divulgação definitiva.
-
-## Destaques
-
-- Visual editorial com identidade em azul de enfermagem, responsivo e acessível.
-- Retratos estáticos antes e depois do vídeo, acionado uma única vez no primeiro scroll, com reprodução contínua e controle de pausar/repetir.
-- Hero com fotografia ampliada, mensagens objetivas e apenas um CTA principal.
-- Navegação mobile, cards de serviços e links para contato via WhatsApp.
-- Suporte à preferência do sistema por movimento reduzido.
-- Sem backend, banco de dados, serviços pagos ou dependências de produção.
-- Pipeline de qualidade com formatação automática, testes e GitHub Actions.
-
-## Tecnologias
-
-**HTML5 · CSS3 · JavaScript (ES Modules) · Node.js (somente build e testes) · Cloudflare Pages**
-
-Sem React, Next.js ou bundler: a solução estática atende aos requisitos com menor complexidade.
-
-## Estrutura
-
-```text
-.
-├── .github/workflows/ci.yml
-├── docs/architecture.md
-├── public/assets/            # Vídeos, stills e fontes
-├── scripts/build.mjs         # Gera dist/
-├── src/
-│   ├── fonts.css
-│   ├── index.html
-│   ├── scripts/
-│   │   ├── contact.js
-│   │   ├── hero-video.js
-│   │   ├── main.js
-│   │   ├── navigation.js
-│   │   └── services.js
-│   └── styles/
-│       ├── hero.css         # Composição minimalista da Hero
-│       └── main.css
-├── tests/static-site.test.mjs
-├── package.json
-└── servir.py                 # Servidor local de prévia estática
-```
-
-## Rodar localmente
-
-Requisitos: Node.js 20+ e Python 3.
+Requisitos: Node.js 22.19+ e Python 3.
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Abra **http://127.0.0.1:4173**. O servidor de desenvolvimento oferece suporte a arquivos estáticos e vídeos.
+Abra **http://127.0.0.1:4173**. Para disponibilizar a prévia na rede local:
 
-Para validar o projeto:
+```bash
+npm run dev:lan
+```
+
+Abra **http://127.0.0.1:4175** no Mac. No celular, use `http://IP-DO-MAC:4175`, conectado à mesma rede Wi-Fi. O IP pode mudar; firewall e isolamento de clientes no roteador podem impedir o acesso. O servidor expõe apenas `dist/`. Encerre com `Ctrl+C`.
+
+## Validação
 
 ```bash
 npm run check
+npm run test:ui
+node scripts/capture-preview.mjs
 ```
 
-Esse comando verifica formatação, gera a pasta `dist/` e executa testes automatizados.
+- `check`: formatação Prettier, build e testes Node.
+- `test:ui`: Playwright com Chrome local, nove larguras, teclado, toque, vídeo, acessibilidade axe, movimento reduzido e fallbacks. Inicia o servidor automaticamente quando necessário.
+- Sem Chrome, execute `npx playwright install chromium` e `PLAYWRIGHT_CHANNEL=chromium npm run test:ui`.
+- As capturas exigem a prévia em execução na porta 4175. São gravadas em `artifacts/qa/`, ignorado pelo Git.
+- O projeto não usa TypeScript nem possui lint independente; Prettier, testes Node e execução real no navegador são as verificações aplicáveis.
 
-## Hospedagem: Cloudflare Pages
+Para medir desempenho localmente:
 
-Site publicado: **https://maria-thereza-enfermagem.pages.dev/**.
+```bash
+npx lighthouse http://127.0.0.1:4175/ --chrome-flags='--headless' --output=html --output-path=artifacts/qa/lighthouse.html
+```
 
-O projeto Cloudflare Pages está conectado ao repositório `XavierRLX/landing-page-enfermeira`. A branch de produção é `main`, com deploy automático ativado: cada novo push nessa branch inicia um build e publica a versão resultante. O GitHub Actions continua responsável pelas verificações do repositório.
+## Estrutura
 
-Configuração do build no Cloudflare Pages:
+```text
+src/index.html              Conteúdo, navegação, serviços e diálogo de vídeo
+src/fonts.css               Fontes locais WOFF2
+src/styles/tokens.css       Paleta, tipografia, espaçamento e estados
+src/styles/main.css         Seções, componentes e responsividade
+src/styles/hero.css         Composição da hero e enquadramento do retrato
+src/scripts/contact.js      Mensagens e destinatário do WhatsApp
+src/scripts/navigation.js   Menu acessível e estado do header
+src/scripts/services.js     Acordeões nativos com expansão suave
+src/scripts/hero-video.js   Vídeo secundário, carregado somente por clique
+src/scripts/motion.js       Timeline GSAP e ScrollTrigger, com reduced motion
+src/scripts/main.js         Inicialização e limpeza, incluindo bfcache
+public/assets/              Marca, fotografias, vídeos e fontes
+scripts/build.mjs           Cópia para dist/, incluindo GSAP local
+scripts/capture-preview.mjs Capturas com assets lazy e reveals concluídos
+tests/                      Integridade, comportamento e navegador
+```
 
-- **Framework preset:** None.
-- **Root directory:** raiz do repositório.
-- **Build command:** `npm run build`.
-- **Build output directory:** `dist`.
-- **Node.js:** 22 (`NODE_VERSION=22` no ambiente de build).
+GSAP é a única dependência de produção; apenas o core e ScrollTrigger são distribuídos, sem CDN ou bundler. Playwright, axe, Lighthouse e Prettier são ferramentas de desenvolvimento. Não há React, backend, banco, formulários, analytics ou coleta de dados de pacientes.
 
-O site é estático e não requer banco de dados, backend ou variáveis secretas. Veja [a arquitetura](docs/architecture.md).
+## Publicação
 
-Para conectar futuramente um domínio `.com.br`, registre o domínio no Registro.br e adicione-o em **Cloudflare Pages → maria-thereza-enfermagem → Custom domains**. Siga as instruções de DNS apresentadas pelo Cloudflare para o domínio escolhido e aguarde a validação e emissão do certificado HTTPS. O domínio próprio ainda não está conectado.
+Produção existente: **https://maria-thereza-enfermagem.pages.dev/**.
 
-## Conteúdo, imagem e atribuições
+O Cloudflare Pages está conectado a `XavierRLX/landing-page-enfermeira`. A branch `main` tem deploy automático. Build: `npm run build`; diretório: `dist`; Node.js: 22. Nenhum segredo é necessário.
 
-O vídeo e as imagens retratam a profissional e foram preparados para este projeto. Não reutilize retratos, identidade visual ou dados de contato sem autorização.
+**O redesign está em `codex/redesign-mtp-premium`, para revisão local. Não foi feito merge, push ou deploy nesta entrega.** Consulte [status](docs/STATUS.md) e [relatório do redesign](docs/redesign-premium.md). Não confundir a prévia com a versão publicada.
 
-As famílias tipográficas utilizadas são **Cormorant Garamond** e **Manrope**; confira as condições de licença dos arquivos distribuídos antes de reutilizá-los em outro produto.
+## Conteúdo e origem dos assets
 
-Este repositório público tem finalidade de demonstração técnica; a publicação do código não implica uma licença automática de reutilização comercial.
+A marca MTP é o PNG transparente fornecido pelo usuário, com variantes derivadas sem redesenho ou vetorização. A hero usa uma conversão WebP do poster existente anterior à restauração generativa. Os retratos restaurados e os dois vídeos continuam preservados; detalhes em [origem dos retratos](docs/hero-image-restoration.md) e [decisões atuais](docs/redesign-premium.md).
+
+Contatos, serviços, instituições e `COREN-RJ 774772-ENF` foram preservados a partir do conteúdo previamente confirmado no projeto. Isso não substitui uma conferência atual do registro e das informações pela profissional antes de publicar.
+
+Retratos, marca e dados profissionais não têm autorização implícita para reutilização em outro produto. As fontes Cormorant Garamond e Manrope continuam locais; os TTF originais foram mantidos. GSAP conserva seus avisos e a referência à licença nos arquivos distribuídos.

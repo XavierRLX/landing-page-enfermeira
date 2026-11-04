@@ -20,3 +20,7 @@ jobs:
         run: npm ci
       - name: Validate formatting, build and tests
         run: npm run check
+      - name: Install Chromium for interface tests
+        run: npx playwright install --with-deps chromium
+      - name: Validate interface and accessibility
+        run: PLAYWRIGHT_CHANNEL=chromium npm run test:ui

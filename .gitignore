@@ -17,3 +17,8 @@ LEIA-ME.md
 .env
 .env.*
 !.env.example
+
+# Local QA evidence
+artifacts/
+playwright-report/
+test-results/

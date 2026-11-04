@@ -1,292 +1,307 @@
-/*
- * Hero — minimal presentation and full-motion playback.
- * Kept separate from legacy global styles so the hero can evolve independently.
- */
 .hero {
-  min-height: 0;
-  padding: clamp(32px, 3vw, 48px) 0;
-  --hero-surface: color-mix(in srgb, var(--blue) 6%, var(--paper));
-  background: linear-gradient(90deg, var(--paper) 52%, var(--hero-surface) 52%);
+  background: var(--honey);
+  position: relative;
 }
-
 .hero-inner {
-  position: static;
-  top: auto;
-  min-height: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 7%;
   align-items: center;
-  gap: clamp(32px, 3.3vw, 52px);
+  padding-block: 54px 38px;
 }
-
 .hero-copy {
-  max-width: 560px;
+  padding-block: 24px;
 }
-
-.hero .eyebrow {
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
   gap: 12px;
-  margin-bottom: 24px;
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
 }
-
-.hero .eyebrow::before {
-  content: "";
-  width: 25px;
+.small-line {
+  display: inline-block;
+  width: 28px;
   height: 1px;
-  flex: 0 0 25px;
-  background: var(--champagne);
+  background: currentColor;
+  flex: none;
 }
-
 .hero h1 {
-  max-width: 650px;
-  margin-bottom: 25px;
-  font-size: clamp(64px, 8.3vw, 120px);
-  letter-spacing: -0.055em;
-  line-height: 0.98;
+  font-size: clamp(4rem, 7.3vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  margin-block: 28px;
 }
-
-.hero h1 em {
+.title-line {
   display: block;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
 }
-
+.title-line > span {
+  display: inline-block;
+}
+.hero h1 em {
+  position: relative;
+}
+.hero h1 em::after {
+  content: "";
+  position: absolute;
+  bottom: 0.05em;
+  left: 0;
+  right: 4%;
+  height: 0.08em;
+  background: var(--ivory);
+  opacity: 0.7;
+  border-radius: 50%;
+}
 .hero-description {
-  max-width: 460px;
-  margin-bottom: 32px;
-  font-size: 18px;
-  line-height: 1.75;
+  max-width: 390px;
+  font-size: 0.9375rem;
+  line-height: 1.85;
+  margin-bottom: 30px;
 }
-
 .hero-actions {
   display: flex;
-  flex-direction: row;
-  gap: 0;
+  flex-direction: column;
+  align-items: start;
+  gap: 12px;
+}
+.action-note {
+  font-size: 0.625rem;
+}
+.hero-location {
+  display: flex;
   align-items: center;
+  gap: 8px;
+  font-size: 0.6875rem;
+  margin-top: 35px;
 }
-
-.hero .hero-actions .button {
-  padding: 17px 26px;
-  min-height: 52px;
-  border-radius: 8px;
-  font-size: 14px;
+.hero-location .icon {
+  width: 17px;
+  height: 17px;
 }
-
 .hero-visual {
   position: relative;
-  justify-self: end;
-  width: 100%;
-  max-width: 620px;
-  padding: 0;
-  margin: 0;
+  min-width: 0;
+  padding: 12px 16px 0 0;
 }
-
-.hero .video-frame {
+.portrait-frame {
   position: relative;
-  height: clamp(560px, 46vw, 660px);
-  min-height: 560px;
-  border-radius: 210px 210px 18px 18px;
-  background: #dce5e9;
-  box-shadow: 0 20px 50px rgb(21 45 67 / 8%);
+  overflow: hidden;
+  border-radius: 44% 44% 4px 4px;
+  aspect-ratio: 0.84;
+  background: var(--honey-light);
 }
-
-.hero .video-frame video,
-.hero .hero-still {
+.hero-portrait {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 8%;
+  object-position: 50% 0%;
 }
-
-/* All three layers share the crop, so switching poses does not shift the portrait. */
-.hero .hero-still {
+.portrait-outline {
   position: absolute;
-  inset: 0;
-  display: block;
-  pointer-events: none;
+  inset: 0 0 70px 16px;
+  border: 1px solid var(--plum);
+  border-radius: 44% 44% 4px 4px;
+  opacity: 0.55;
 }
-
-.hero .hero-still-final,
-.hero [data-media-state="video"] .hero-still,
-.hero [data-media-state="final"] .hero-still-initial {
-  visibility: hidden;
-}
-
-.hero [data-media-state="final"] .hero-still-final {
-  visibility: visible;
-}
-
-.hero [data-media-state="initial"] video,
-.hero [data-media-state="final"] video {
-  visibility: hidden;
-}
-
-.hero .motion-toggle[hidden] {
-  display: none;
-}
-
-.hero .motion-toggle {
-  right: 16px;
-  bottom: 16px;
+.portrait-flower {
+  position: absolute;
+  bottom: 63px;
+  left: -43px;
+  width: 94px;
+  height: 94px;
+  background: var(--lilac);
+  border-radius: 50%;
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 1px solid rgb(255 255 255 / 55%);
-  border-radius: 50%;
-  background: rgb(255 255 255 / 90%);
-  box-shadow: 0 4px 20px rgb(21 45 67 / 14%);
-  color: var(--navy);
-  font-size: 19px;
-  backdrop-filter: blur(8px);
 }
-
-.hero .motion-toggle:hover {
-  background: white;
+.portrait-flower svg {
+  width: 74px;
+  height: 74px;
+  fill: none;
+  stroke: var(--plum);
+  stroke-width: 1;
 }
-
-@media (max-width: 1180px) and (min-width: 801px) {
+.hero-visual figcaption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+}
+.hero-visual figcaption span:first-child {
+  font: 500 1.4375rem/1.1 var(--serif);
+}
+.hero-visual figcaption span:last-child {
+  font-size: 0.5625rem;
+  max-width: 125px;
+  text-align: right;
+}
+.hero-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  border-top: 1px solid var(--line);
+  min-height: 72px;
+  font-size: 0.6875rem;
+}
+.hero-foot a {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  min-height: 44px;
+}
+.hero-foot a span {
+  font-size: 22px;
+}
+@media (min-width: 1500px) {
   .hero-inner {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-    gap: 30px;
-  }
-
-  .hero h1 {
-    font-size: clamp(58px, 6.7vw, 83px);
-  }
-
-  .hero .video-frame {
-    min-height: 505px;
-    height: min(70svh, 635px);
-    border-radius: 160px 160px 16px 16px;
+    padding-block: 64px 48px;
   }
 }
-
-@media (max-width: 800px) {
-  .hero {
-    padding: 32px 0 46px;
-    background: var(--paper);
-  }
-
+@media (max-width: 900px) {
   .hero-inner {
-    position: static;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    align-items: stretch;
-    min-height: 0;
+    gap: 5%;
+    padding-block: 36px 30px;
   }
-
-  .hero-copy {
-    max-width: 560px;
-  }
-
-  .hero .eyebrow {
-    margin-bottom: 15px;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-  }
-
   .hero h1 {
-    margin-bottom: 18px;
-    font-size: clamp(52px, 9.5vw, 74px);
-    line-height: 1;
+    font-size: clamp(3.75rem, 8vw, 5rem);
   }
-
+  .hero-eyebrow {
+    font-size: 0.5625rem;
+  }
+  .small-line {
+    display: none;
+  }
   .hero-description {
-    margin-bottom: 22px;
-    max-width: 490px;
-    font-size: 16px;
-    line-height: 1.65;
+    font-size: 0.875rem;
   }
-
-  .hero-actions {
-    flex-direction: row;
+  .hero-visual figcaption {
+    flex-direction: column;
     align-items: start;
+    gap: 5px;
   }
-
-  .hero .hero-actions .button {
-    padding: 14px 22px;
-    min-height: 50px;
-    font-size: 14px;
+  .hero-visual figcaption span:last-child {
+    text-align: left;
+    max-width: none;
   }
-
-  .hero .hero-visual {
-    align-self: center;
-    width: 100%;
-    max-width: 430px;
-    padding: 0;
-    margin: 0 auto;
+  .portrait-flower {
+    width: 68px;
+    height: 68px;
+    left: -20px;
+    bottom: 80px;
   }
-
-  .hero .video-frame {
-    height: min(67svh, 540px);
-    min-height: 410px;
-    border-radius: 190px 190px 16px 16px;
+  .portrait-flower svg {
+    width: 54px;
+    height: 54px;
   }
-
-  .hero .video-frame video {
-    object-position: center 8%;
-  }
-
-  .hero .motion-toggle {
-    right: 14px;
-    bottom: 14px;
-    width: 44px;
-    height: 44px;
+  .portrait-frame {
+    aspect-ratio: 0.68;
   }
 }
-
-@media (min-width: 641px) and (max-width: 800px) {
-  .hero {
-    padding: 40px 0;
-    background: linear-gradient(90deg, var(--paper) 52%, var(--hero-surface) 52%);
-  }
-
+@media (max-width: 600px) {
   .hero-inner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-    align-items: center;
-    gap: 32px;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-block: 28px;
   }
-
+  .hero-copy {
+    padding: 0;
+  }
+  .hero-eyebrow {
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    margin: 0;
+  }
   .hero h1 {
-    font-size: clamp(48px, 7.8vw, 62px);
+    font-size: clamp(3.25rem, 13.3vw, 4.75rem);
+    line-height: 0.98;
+    margin-block: 18px;
   }
-
-  .hero .video-frame {
-    min-height: 440px;
-    height: 470px;
-    border-radius: 150px 150px 16px 16px;
+  .hero .title-line {
+    display: inline;
   }
-}
-
-@media (max-width: 420px) {
-  .hero-inner {
-    gap: 24px;
+  .hero .title-line:first-child::after {
+    content: " ";
   }
-
-  .hero h1 {
-    font-size: clamp(47px, 12vw, 54px);
-  }
-
   .hero-description {
-    font-size: 15px;
+    font-size: 0.875rem;
+    line-height: 1.75;
+    max-width: 370px;
+    margin-bottom: 20px;
   }
-
-  .hero .hero-actions .button {
+  .hero-actions {
+    gap: 9px;
+  }
+  .hero-actions .button {
+    min-height: 50px;
+    padding: 13px 20px;
+    font-size: 0.75rem;
     width: 100%;
-    justify-content: center;
   }
-
-  .hero .video-frame {
-    height: min(59svh, 465px);
-    min-height: 340px;
-    border-radius: 145px 145px 14px 14px;
+  .action-note {
+    font-size: 0.5625rem;
+    align-self: center;
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero .motion-toggle {
-    transition: none;
+  .hero-location {
+    display: none;
+  }
+  .hero-visual {
+    width: 100%;
+    max-width: 380px;
+    justify-self: center;
+    padding: 8px 10px 0 0;
+  }
+  .portrait-frame {
+    height: clamp(260px, 78vw, 335px);
+    aspect-ratio: auto;
+    border-radius: 42% 42% 3px 3px;
+  }
+  .hero-portrait {
+    object-position: 50% 0%;
+  }
+  .portrait-outline {
+    inset: 0 0 59px 10px;
+    border-radius: 42% 42% 3px 3px;
+  }
+  .portrait-flower {
+    width: 60px;
+    height: 60px;
+    left: -9px;
+    bottom: 76px;
+  }
+  .portrait-flower svg {
+    width: 46px;
+    height: 46px;
+  }
+  .hero-visual figcaption {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    margin-top: 15px;
+  }
+  .hero-visual figcaption span:first-child {
+    font-size: 1.1875rem;
+    max-width: 160px;
+  }
+  .hero-visual figcaption span:last-child {
+    text-align: right;
+    max-width: 110px;
+    font-size: 0.5rem;
+  }
+  .hero-foot {
+    min-height: 62px;
+    font-size: 0.5625rem;
+    gap: 18px;
+  }
+  .hero-foot > span {
+    max-width: 145px;
+  }
+  .hero-foot a {
+    gap: 12px;
+    flex-shrink: 0;
   }
 }

@@ -17,6 +17,16 @@ test("a saída publica HTML, CSS, módulos e vídeos", async () => {
     "index.html",
     "style.css",
     "hero.css",
+    "tokens.css",
+    "scripts/motion.js",
+    "vendor/gsap.min.js",
+    "vendor/ScrollTrigger.min.js",
+    "assets/brand/mtp-original.png",
+    "assets/brand/mtp-plum.png",
+    "assets/brand/mtp-ivory.png",
+    "assets/brand/mtp-honey.png",
+    "assets/brand/favicon.png",
+    "assets/brand/social.png",
     "fonts.css",
     "scripts/main.js",
     "scripts/contact.js",
@@ -36,14 +46,15 @@ test("a saída publica HTML, CSS, módulos e vídeos", async () => {
 test("a página carrega os módulos e o vídeo sem dependências externas", async () => {
   const html = await readFile(path.join(output, "index.html"), "utf8");
   assert.match(html, /type="module"\s+src="scripts\/main\.js"/);
-  assert.match(html, /id="hero-video"/);
+  assert.match(html, /id="portrait-video"/);
   assert.match(html, /href="hero\.css"/);
   assert.doesNotMatch(html, /video-scroll-track|video-caption|professional-card|care-ribbon/);
   assert.match(html, /enfermeira-scroll\.mp4/);
   assert.match(html, /enfermeira-mobile\.mp4/);
-  assert.match(html, /data-media-state="initial"/);
-  assert.match(html, /class="hero-still hero-still-initial"/);
-  assert.match(html, /class="hero-still hero-still-final"/);
+  assert.match(html, /class="hero-portrait"/);
+  assert.match(html, /preload="none"/);
+  assert.doesNotMatch(html, /\sautoplay[\s>]/);
+  assert.match(html, /COREN-RJ 774772-ENF/);
   assert.match(html, /data-whatsapp/);
 });
 

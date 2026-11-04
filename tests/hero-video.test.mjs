@@ -2,257 +2,132 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { initializeHeroVideo } from "../src/scripts/hero-video.js";
 
-function createEventTarget() {
-  const listeners = new Map();
-  return {
-    addEventListener(name, callback) {
-      const callbacks = listeners.get(name) ?? [];
-      callbacks.push(callback);
-      listeners.set(name, callbacks);
-    },
-    dispatch(name, event = {}) {
-      for (const callback of listeners.get(name) ?? []) callback(event);
-    },
+function harness() {
+  const previous = globalThis.document;
+  const doc = new EventTarget();
+  const opener = new EventTarget();
+  opener.focus = () => {
+    opener.focused = true;
   };
-}
-
-function createHarness({
-  reducedMotion = false,
-  imageFails = false,
-  playFails = false,
-  deferPlaying = false,
-} = {}) {
-  const frame = { dataset: { mediaState: "initial" } };
-  const finalStill = {
-    decode: () => (imageFails ? Promise.reject(new Error("image")) : Promise.resolve()),
-  };
-  const scroll = createEventTarget();
-  const documentEvents = createEventTarget();
-  const reduced = { ...createEventTarget(), matches: reducedMotion };
-  const button = {
-    ...createEventTarget(),
-    attributes: {},
-    icon: { textContent: "" },
-    setAttribute(name, value) {
-      this.attributes[name] = value;
-    },
-    querySelector() {
-      return this.icon;
-    },
-  };
-
-  const video = {
-    ...createEventTarget(),
+  const closer = new EventTarget();
+  const sources = [new EventTarget(), new EventTarget()];
+  sources.forEach((source, index) => {
+    source.dataset = { src: `portrait-${index}.mp4` };
+  });
+  const status = { textContent: "" };
+  const video = new EventTarget();
+  Object.assign(video, {
     paused: true,
-    ended: false,
-    currentTime: 0,
-    duration: 6,
-    playbackRate: 1,
     playCount: 0,
+    loadCount: 0,
     play() {
-      if (playFails) return Promise.reject(new Error("autoplay"));
+      this.playCount++;
       this.paused = false;
-      this.ended = false;
-      this.playCount += 1;
-      this.dispatch("play");
-      if (!deferPlaying) this.dispatch("playing");
       return Promise.resolve();
     },
     pause() {
       this.paused = true;
-      this.dispatch("pause");
     },
-  };
-
-  const oldWindow = globalThis.window;
-  const oldDocument = globalThis.document;
-
-  globalThis.window = {
-    ...scroll,
-    matchMedia() {
-      return reduced;
+    load() {
+      this.loadCount++;
     },
-  };
-  globalThis.document = {
-    ...documentEvents,
-    hidden: false,
-    querySelector(selector) {
-      if (selector === ".video-frame") return frame;
-      if (selector === ".hero-still-final") return finalStill;
-      if (selector === "#hero-video") return video;
-      if (selector === ".motion-toggle") return button;
-      return null;
+    querySelectorAll: () => sources,
+    querySelector: () => sources.at(-1),
+  });
+  const dialog = new EventTarget();
+  Object.assign(dialog, {
+    open: false,
+    showModal() {
+      this.open = true;
     },
-  };
-
-  initializeHeroVideo();
-
+    close() {
+      this.open = false;
+      this.dispatchEvent(new Event("close"));
+    },
+    querySelector: (selector) => (selector === ".video-close" ? closer : status),
+  });
+  doc.querySelector = (selector) =>
+    ({ ".video-dialog": dialog, "#portrait-video": video, ".video-open": opener })[selector];
+  globalThis.document = doc;
+  const cleanup = initializeHeroVideo();
   return {
-    button,
-    frame,
+    doc,
+    opener,
+    closer,
     video,
-    reduced,
-    scroll() {
-      scroll.dispatch("scroll");
-    },
-    click() {
-      button.dispatch("click");
-    },
-    changeVisibility(hidden) {
-      globalThis.document.hidden = hidden;
-      documentEvents.dispatch("visibilitychange");
-    },
-    cleanup() {
-      globalThis.window = oldWindow;
-      globalThis.document = oldDocument;
+    dialog,
+    status,
+    sources,
+    cleanup,
+    restore() {
+      cleanup();
+      globalThis.document = previous;
     },
   };
 }
 
-test("primeiro scroll dispara reprodução inteira sem controlar currentTime", async () => {
-  const ui = createHarness();
+test("retrato não baixa vídeo até uma solicitação explícita", () => {
+  const ui = harness();
   try {
+    ui.doc.dispatchEvent(new Event("scroll"));
     assert.equal(ui.video.playCount, 0);
-    assert.equal(ui.frame.dataset.mediaState, "initial");
-    ui.scroll();
+    assert.equal(ui.video.loadCount, 0);
+    assert.equal(ui.sources[0].src, undefined);
+    ui.opener.dispatchEvent(new Event("click"));
+    assert.equal(ui.dialog.open, true);
     assert.equal(ui.video.playCount, 1);
-    assert.equal(ui.video.playbackRate, 2);
-    assert.equal(ui.frame.dataset.mediaState, "video");
-
-    ui.video.currentTime = 2.5;
-    ui.scroll();
-    ui.scroll();
-    assert.equal(ui.video.currentTime, 2.5);
-    assert.equal(ui.video.playCount, 1);
-
-    // Allow the simulated play() promise to settle before testing replay.
-    await new Promise((resolve) => setImmediate(resolve));
-    ui.video.ended = true;
-    ui.video.paused = true;
-    ui.video.dispatch("ended");
-    assert.equal(ui.button.attributes["aria-label"], "Repetir vídeo");
-    assert.equal(ui.frame.dataset.mediaState, "final");
-
-    ui.click();
-    assert.equal(ui.video.currentTime, 0);
-    assert.equal(ui.video.playCount, 2);
-    assert.equal(ui.frame.dataset.mediaState, "video");
+    assert.equal(ui.sources[0].src, "portrait-0.mp4");
+    ui.closer.dispatchEvent(new Event("click"));
+    assert.equal(ui.video.paused, true);
+    assert.equal(ui.opener.focused, true);
+    ui.opener.dispatchEvent(new Event("click"));
+    assert.equal(ui.video.loadCount, 1);
   } finally {
-    ui.cleanup();
+    ui.restore();
   }
 });
 
-test("reduced motion desativa autoplay, mantendo reprodução manual", () => {
-  const ui = createHarness({ reducedMotion: true });
+test("Escape e aba oculta pausam sem retomada automática", () => {
+  const ui = harness();
   try {
-    ui.scroll();
+    ui.opener.dispatchEvent(new Event("click"));
+    ui.dialog.dispatchEvent(new Event("cancel"));
+    assert.equal(ui.video.paused, true);
+    ui.opener.dispatchEvent(new Event("click"));
+    ui.doc.hidden = true;
+    ui.doc.dispatchEvent(new Event("visibilitychange"));
+    assert.equal(ui.video.paused, true);
+    ui.doc.hidden = false;
+    ui.doc.dispatchEvent(new Event("visibilitychange"));
+    assert.equal(ui.video.paused, true);
+  } finally {
+    ui.restore();
+  }
+});
+
+test("falha da fonte é anunciada e cleanup remove handlers", () => {
+  const ui = harness();
+  try {
+    ui.sources.at(-1).dispatchEvent(new Event("error"));
+    assert.match(ui.status.textContent, /Não foi possível carregar/);
+    ui.cleanup();
+    ui.opener.dispatchEvent(new Event("click"));
     assert.equal(ui.video.playCount, 0);
-    ui.click();
-    assert.equal(ui.video.playCount, 1);
-    assert.equal(ui.button.attributes["aria-label"], "Pausar vídeo");
-    ui.click();
+    assert.equal(ui.dialog.open, false);
+  } finally {
+    ui.restore();
+  }
+});
+
+test("reprodução pendente não continua após fechar o diálogo", () => {
+  const ui = harness();
+  try {
+    ui.opener.dispatchEvent(new Event("click"));
+    ui.closer.dispatchEvent(new Event("click"));
+    ui.video.paused = false;
+    ui.video.dispatchEvent(new Event("playing"));
     assert.equal(ui.video.paused, true);
   } finally {
-    ui.cleanup();
-  }
-});
-
-test("vídeo pausa em aba oculta e retoma ao voltar", async () => {
-  const ui = createHarness();
-  try {
-    ui.scroll();
-    await Promise.resolve();
-    await Promise.resolve();
-    ui.changeVisibility(true);
-    assert.equal(ui.video.paused, true);
-    ui.changeVisibility(false);
-    assert.equal(ui.video.playCount, 2);
-  } finally {
-    ui.cleanup();
-  }
-});
-
-const settle = () => new Promise((resolve) => setImmediate(resolve));
-
-test("autoplay bloqueado preserva o still inicial e o controle manual", async () => {
-  const ui = createHarness({ playFails: true });
-  try {
-    ui.scroll();
-    await settle();
-    assert.equal(ui.frame.dataset.mediaState, "initial");
-    assert.equal(ui.button.attributes["aria-label"], "Reproduzir vídeo");
-    assert.equal(ui.video.paused, true);
-  } finally {
-    ui.cleanup();
-  }
-});
-
-test("still final indisponível e erro de vídeo preservam um retrato", async () => {
-  const ui = createHarness({ imageFails: true });
-  try {
-    ui.scroll();
-    await settle();
-    ui.video.ended = true;
-    ui.video.paused = true;
-    ui.video.dispatch("ended");
-    assert.equal(ui.frame.dataset.mediaState, "initial");
-    ui.video.dispatch("error");
-    assert.equal(ui.button.hidden, true);
-  } finally {
-    ui.cleanup();
-  }
-});
-
-test("ativar movimento reduzido em outra aba impede retomada automática", async () => {
-  const ui = createHarness();
-  try {
-    ui.scroll();
-    await settle();
-    ui.changeVisibility(true);
-    ui.reduced.matches = true;
-    ui.reduced.dispatch("change", { matches: true });
-    ui.changeVisibility(false);
-    assert.equal(ui.video.paused, true);
-    assert.equal(ui.video.playCount, 1);
-  } finally {
-    ui.cleanup();
-  }
-});
-
-test("pausa manual conserva o quadro intermediário e retoma sem reiniciar", async () => {
-  const ui = createHarness();
-  try {
-    ui.scroll();
-    await settle();
-    ui.video.currentTime = 2;
-    ui.click();
-    assert.equal(ui.video.paused, true);
-    assert.equal(ui.frame.dataset.mediaState, "video");
-    ui.click();
-    assert.equal(ui.video.currentTime, 2);
-    assert.equal(ui.video.playCount, 2);
-  } finally {
-    ui.cleanup();
-  }
-});
-
-test("imagem inicial só desaparece quando há reprodução, inclusive no replay", async () => {
-  const ui = createHarness({ deferPlaying: true });
-  try {
-    ui.scroll();
-    assert.equal(ui.frame.dataset.mediaState, "initial");
-    ui.video.dispatch("playing");
-    assert.equal(ui.frame.dataset.mediaState, "video");
-    await settle();
-    ui.video.ended = true;
-    ui.video.paused = true;
-    ui.video.dispatch("ended");
-    assert.equal(ui.frame.dataset.mediaState, "final");
-    ui.click();
-    assert.equal(ui.frame.dataset.mediaState, "initial");
-    ui.video.dispatch("playing");
-    assert.equal(ui.frame.dataset.mediaState, "video");
-  } finally {
-    ui.cleanup();
+    ui.restore();
   }
 });
