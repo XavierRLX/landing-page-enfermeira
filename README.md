@@ -2,6 +2,23 @@
 
 Landing editorial estática em **HTML semântico, CSS e JavaScript ES Modules**, com fontes e assets locais. Identidade em amarelo mel, lilás, ameixa e marfim; logotipo MTP fornecido pelo responsável; retrato estático e contato direto pelo WhatsApp.
 
+## Case de engenharia
+
+**[Ver site publicado](https://maria-thereza-enfermagem.pages.dev/)** · **[Código-fonte](https://github.com/XavierRLX/landing-page-enfermeira)**
+
+O desafio foi construir uma presença digital profissional com **identidade visual própria, performance, acessibilidade e manutenção simples**, sem introduzir React ou infraestrutura de backend quando uma arquitetura estática resolve o problema.
+
+### Decisões técnicas
+
+- **HTML semântico + CSS organizado por responsabilidade:** facilita evolução visual e favorece acessibilidade e indexação.
+- **JavaScript ES Modules:** comportamentos isolados para menu, serviços, contatos, motion e mídia.
+- **GSAP com carregamento controlado:** animações progressivas que respeitam `prefers-reduced-motion`, sem bloquear a leitura do conteúdo.
+- **Vídeo sob demanda:** reduz o custo de carregamento inicial quando o visitante não solicita reprodução.
+- **Build estático e deploy na Cloudflare Pages:** operação simples, sem credenciais de banco ou servidor de aplicação.
+- **QA de interface:** verificações automatizadas de navegação, interação, responsividade, teclado e acessibilidade com Playwright/axe.
+
+**Escopo:** site institucional estático; não é um sistema clínico, não gerencia pacientes e não exige autenticação.
+
 ## Prévia local
 
 Requisitos: Node.js 22.19+ e Python 3.
