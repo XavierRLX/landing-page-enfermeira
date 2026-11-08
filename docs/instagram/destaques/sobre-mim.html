@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>MTP · Instagram · Destaque Sobre mim</title>
+  <style>
+    @font-face { font-family: "Cormorant Garamond"; src: url("../../../public/assets/font-3.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+    @font-face { font-family: "Cormorant Garamond"; src: url("../../../public/assets/font-4.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+    @font-face { font-family: "Manrope"; src: url("../../../public/assets/font-5.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Manrope"; src: url("../../../public/assets/font-7.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+    :root { --honey:#e6b83f; --lilac:#b49ac8; --plum:#493b59; --ivory:#faf7f0; --lilac-light:#eee7f1; }
+    * {box-sizing:border-box;}
+    body { margin:0; padding:48px; background:#ebe8ee; color:var(--plum); font-family:"Manrope",Arial,sans-serif; }
+    h1 { margin:0 0 10px; font-size:30px; } .subtitle { margin:0 0 40px; line-height:1.7; }
+    .gallery { display:flex; flex-wrap:wrap; gap:34px; align-items:flex-start; }
+    .viewport { width:302.4px; height:537.6px; overflow:hidden; border-radius:9px; box-shadow:0 14px 45px #25162c25; }
+    .story {position:relative; width:1080px; height:1920px; overflow:hidden; background:var(--ivory); transform:scale(.28); transform-origin:top left;}
+    .story * {box-sizing:border-box;}
+    .label {position:absolute; top:130px; left:90px; font-size:25px; font-weight:600; letter-spacing:5px; text-transform:uppercase;}
+    .index {position:absolute; top:130px; right:88px; font-size:25px; letter-spacing:3px;}
+    .rule {width:112px; height:8px; background:var(--honey); margin-bottom:54px;}
+    .story h2 {font:500 102px/1.05 "Cormorant Garamond",Georgia,serif; letter-spacing:-2px; margin:0;}
+    .story p {font:400 34px/1.55 "Manrope",Arial,sans-serif; margin:0;}
+    .logo {position:absolute; width:205px; height:auto; object-fit:contain;}
+    .footer {position:absolute; left:90px; bottom:144px; right:90px; border-top:2px solid currentColor; padding-top:24px; font-size:24px; font-weight:600; letter-spacing:3px; display:flex; justify-content:space-between; gap:24px;}
+    .story--one {background:var(--lilac-light);}
+    .story--one .photo {position:absolute; top:120px; right:-98px; width:960px; height:1110px; object-fit:cover; object-position:center 23%; filter:saturate(.96);}
+    .story--one .photo-fade {position:absolute; top:600px; right:0; width:1080px; height:800px; background:linear-gradient(0deg,var(--lilac-light) 0%,transparent 85%);}
+    .story--one .intro {position:absolute; top:1150px; left:90px; right:90px;}
+    .story--one .intro h2 {font-size:113px; margin-bottom:36px;}
+    .story--one .intro p {max-width:820px;}
+    .story--one .logo {bottom:260px; right:88px; width:170px;}
+    .story--two {background:var(--ivory);}
+    .story--two .deco {position:absolute; right:-220px; top:-180px; width:750px; height:750px; background:var(--lilac-light); border-radius:100%;}
+    .story--two .content {position:absolute; top:320px; left:90px; right:90px;}
+    .story--two h2 {font-size:117px; margin-bottom:90px;}
+    .credential {padding:36px 0; border-top:2px solid #493b5940;}
+    .credential .item-label {display:block; font-size:23px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#6b5e72; margin-bottom:18px;}
+    .credential p {font-size:37px; line-height:1.42;}
+    .story--two .logo {bottom:258px; right:88px; width:145px;}
+    .story--three {background:var(--plum); color:var(--ivory);}
+    .story--three .top {position:absolute; top:340px; left:90px; right:90px;}
+    .story--three h2 {font-size:123px; margin-bottom:100px;}
+    .pillars {display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+    .pillar {min-height:245px; background:#ffffff0d; border:2px solid #ffffff33; border-radius:12px; padding:36px; display:flex; align-items:end;}
+    .pillar span {font-size:34px; line-height:1.35; font-weight:600;}
+    .story--three .logo {bottom:284px; right:88px; width:205px;}
+    .story--four {background:var(--lilac-light);}
+    .story--four .arc {position:absolute; left:-360px; bottom:-350px; width:1080px; height:1080px; border-radius:100%; background:var(--lilac);}
+    .story--four .message {position:absolute; top:500px; left:90px; right:90px;}
+    .story--four h2 {font-size:130px; margin-bottom:70px;}
+    .story--four p {max-width:760px; margin-bottom:80px;}
+    .story--four .cta {display:inline-block; background:var(--plum); color:var(--ivory); padding:29px 40px; font-size:30px; font-weight:600; border-radius:3px;}
+    .story--four .logo {bottom:300px; right:90px; width:238px;}
+    .story--four .footer {color:var(--plum);}
+    .gallery-notes {max-width:1100px; padding:35px 0; font-size:15px;}
+    body.export {margin:0; padding:0; background:none; width:1080px; height:1920px; overflow:hidden;}
+    body.export header, body.export .gallery-notes {display:none;}
+    body.export .gallery {display:block; width:1080px; height:1920px;}
+    body.export .viewport {width:1080px; height:1920px; border-radius:0; box-shadow:none;}
+    body.export .story {transform:none;}
+    body.export .viewport[hidden] {display:none;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MTP · Destaque “Sobre mim”</h1>
+    <p class="subtitle">Prévia editorial com quatro Stories 1080 × 1920. A foto usada no Story 01 é provisória: substituir pela versão aprovada (uniforme branco e fundo lilás).</p>
+  </header>
+  <main class="gallery">
+    <div class="viewport" data-slide="1">
+      <article class="story story--one" aria-label="Story 1 — Apresentação">
+        <img class="photo" src="../../../public/assets/enfermeira-portrait.webp" alt="Retrato de Maria Thereza Pugliese"/>
+        <div class="photo-fade" aria-hidden="true"></div>
+        <span class="label">MTP · Sobre mim</span><span class="index">01 / 04</span>
+        <div class="intro">
+          <div class="rule"></div>
+          <h2>Olá, eu sou<br/>Maria Thereza<br/><em>Pugliese.</em></h2>
+          <p>Enfermeira. Acredito em um cuidado que acolhe, respeita e olha para cada pessoa.</p>
+        </div>
+        <img class="logo" src="../../../public/assets/brand/mtp-plum-compact.png" alt="Marca MTP"/>
+        <div class="footer"><span>PUGLIESE ENFERMAGEM</span><span>CONHEÇA MINHA HISTÓRIA</span></div>
+      </article>
+    </div>
+    <div class="viewport" data-slide="2">
+      <article class="story story--two" aria-label="Story 2 — Formação e trajetória">
+        <div class="deco" aria-hidden="true"></div>
+        <span class="label">MTP · Trajetória</span><span class="index">02 / 04</span>
+        <div class="content">
+          <div class="rule"></div>
+          <h2>Conhecimento<br/>que se transforma<br/><em>em cuidado.</em></h2>
+          <div class="credential"><span class="item-label">Graduação</span><p>Enfermagem · Faculdade Bezerra de Araújo</p></div>
+          <div class="credential"><span class="item-label">Especialização</span><p>Enfermagem Neonatal · Ensino Einstein</p></div>
+          <div class="credential"><span class="item-label">Trajetória</span><p>Vivência profissional na rede pública de saúde</p></div>
+        </div>
+        <img class="logo" src="../../../public/assets/brand/mtp-plum-compact.png" alt="Marca MTP"/>
+        <div class="footer"><span>MARIA THEREZA PUGLIESE</span><span>ENFERMEIRA</span></div>
+      </article>
+    </div>
+    <div class="viewport" data-slide="3">
+      <article class="story story--three" aria-label="Story 3 — Compromisso com o cuidado">
+        <span class="label">MTP · Meu compromisso</span><span class="index">03 / 04</span>
+        <div class="top">
+          <div class="rule"></div>
+          <h2>O cuidado está<br/><em>nos detalhes.</em></h2>
+          <div class="pillars">
+            <div class="pillar"><span>Conhecimento<br/>técnico</span></div>
+            <div class="pillar"><span>Atenção<br/>individualizada</span></div>
+            <div class="pillar"><span>Orientação e<br/>acolhimento</span></div>
+            <div class="pillar"><span>Responsabilidade<br/>e respeito</span></div>
+          </div>
+        </div>
+        <img class="logo" src="../../../public/assets/brand/mtp-ivory-compact.png" alt="Marca MTP"/>
+        <div class="footer"><span>PUGLIESE ENFERMAGEM</span><span>CUIDADO QUE ACOLHE</span></div>
+      </article>
+    </div>
+    <div class="viewport" data-slide="4">
+      <article class="story story--four" aria-label="Story 4 — Convite">
+        <div class="arc" aria-hidden="true"></div>
+        <span class="label">MTP · Seja bem-vindo(a)</span><span class="index">04 / 04</span>
+        <div class="message">
+          <div class="rule"></div>
+          <h2>Este espaço<br/>também é<br/><em>para você.</em></h2>
+          <p>Por aqui, compartilho informações sobre saúde, prevenção, cuidados de enfermagem e minha atuação profissional.</p>
+          <div class="cta">Acompanhe a Pugliese Enfermagem</div>
+        </div>
+        <img class="logo" src="../../../public/assets/brand/mtp-plum-compact.png" alt="Marca MTP"/>
+        <div class="footer"><span>MARIA THEREZA PUGLIESE</span><span>CUIDADO QUE ACOLHE</span></div>
+      </article>
+    </div>
+  </main>
+  <p class="gallery-notes">Prévia de produção. Não publicar sem revisão de informações profissionais, imagem final e avaliação de legibilidade em celular.</p>
+  <script>
+    const selected = Number(new URLSearchParams(location.search).get("slide"));
+    if (Number.isInteger(selected) && selected >= 1 && selected <= 4) {
+      document.body.classList.add("export");
+      document.querySelectorAll(".viewport").forEach((el) => {
+        el.hidden = Number(el.dataset.slide) !== selected;
+      });
+    }
+  </script>
+</body>
+</html>
